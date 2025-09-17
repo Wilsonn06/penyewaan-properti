@@ -17,13 +17,6 @@ router.post('/', async (req, res) => {
 
     const id_deposit = depositResponse.data.id_deposit;
 
-    // 2. Simpan transaksi ke tabel Sewa → status langsung 'active'
-    const [result] = await db.query(
-      `INSERT INTO Sewa (id_pengguna, id_properti, id_deposit, status)
-       VALUES (?, ?, ?, ?)`,
-      [id_pengguna, id_properti, id_deposit, 'active']
-    );
-
     // 3. Ambil data pengguna lama dari service penyewa
     const { data: penyewa } = await axios.get(`http://localhost:5000/manajemen_penyewa/${id_pengguna}`);
 
