@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
-    // Ambil detail properti dari service properti
+    // Ambil detail properti (sudah termasuk ulasan dari service manajemen_properti)
     const propertiResponse = await axios.get(`http://localhost:5000/manajemen_properti/${id}`);
     const properti = propertiResponse.data;
 
@@ -29,20 +29,15 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Properti tidak ditemukan' });
     }
 
-    // Ambil ulasan dari service review
-    const reviewResponse = await axios.get(`http://localhost:3000/review/${id}`);
-    const ulasan = reviewResponse.data;
-
-    // Gabungkan hasil
-    res.json({
-      ...properti,
-      ulasan
-    });
+    // Karena service manajemen_properti sudah meng-include ulasan,
+    // cukup return hasilnya saja
+    res.json(properti);
 
   } catch (error) {
     console.error('Error mengambil data properti:', error.message);
     res.status(500).json({ message: 'Terjadi kesalahan saat mengambil data properti' });
   }
 });
+
 
 module.exports = router;
